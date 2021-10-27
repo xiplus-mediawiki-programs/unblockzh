@@ -70,8 +70,12 @@ class UnblockZh:
             return
 
         print('Querying threads')
-        tmp = self.service.users().threads().list(userId=self.user_id, q=self.query, maxResults=self.maxResults).execute()
-        # tmp = self.service.users().threads().list(userId=self.user_id, labelIds=self.unblockZhLabelId, maxResults=self.maxResults).execute()
+        if self.unblockZhLabelName is None:
+            tmp = self.service.users().threads().list(userId=self.user_id, q=self.query, maxResults=self.maxResults).execute()
+        else:
+            self.getLabel()
+            tmp = self.service.users().threads().list(userId=self.user_id, labelIds=self.unblockZhLabelId, maxResults=self.maxResults).execute()
+
         with open(path, 'w', encoding='utf8') as f:
             json.dump(tmp, f, ensure_ascii=False, indent=4)
 
