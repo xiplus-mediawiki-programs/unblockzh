@@ -1,0 +1,7 @@
+__pycache__/
+cache/
+tmp/
+
+config.py
+credentials.json
+token.json
