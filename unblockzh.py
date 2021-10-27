@@ -31,15 +31,16 @@ class UnblockZh:
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
         creds = None
-        if os.path.exists('token.json'):
-            creds = Credentials.from_authorized_user_file(BASE_DIR / 'token.json', SCOPES)
+        token_path = BASE_DIR / 'token.json'
+        if os.path.exists(token_path):
+            creds = Credentials.from_authorized_user_file(token_path, SCOPES)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(BASE_DIR / 'credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
-            with open('token.json', 'w') as token:
+            with open(token_path, 'w') as token:
                 token.write(creds.to_json())
 
         self.service = build('gmail', 'v1', credentials=creds)
