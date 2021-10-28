@@ -23,6 +23,7 @@ class UnblockZh:
     user_id = 'me'
     maxResults = 500
     cacheThreads = False
+    cacheThread = False
     query = 'list:unblock-zh@lists.wikimedia.org'
     unblockZhLabelName = None
     threads = []
@@ -88,7 +89,7 @@ class UnblockZh:
 
     def getThread(self, threadId):
         path = CACHE_DIR / '{}.json'.format(threadId)
-        if os.path.exists(path):
+        if os.path.exists(path) and self.cacheThread:
             with open(path, 'r', encoding='utf8') as f:
                 return json.load(f)
 
@@ -175,7 +176,7 @@ class UnblockZh:
 
         for thread in self.threads:
             tdata = self.getThread(thread['id'])
-            print('{} - {}'.format(thread['id'], tdata['messages'][0]['snippet']))
+            print('{} - {} - {}'.format(thread['id'], thread['historyId'], tdata['messages'][0]['snippet']))
 
 
 if __name__ == '__main__':
