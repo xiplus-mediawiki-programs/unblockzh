@@ -105,8 +105,6 @@ class UnblockZh:
         return tdata
 
     def parseThread(self, tdata):
-        nmsgs = len(tdata['messages'])
-
         msg = tdata['messages'][0]['payload']
         result = {
             'id': tdata['id'],
@@ -176,7 +174,8 @@ class UnblockZh:
 
         for thread in self.threads:
             tdata = self.getThread(thread['id'])
-            print('{} - {} - {}'.format(thread['id'], thread['historyId'], tdata['messages'][0]['snippet']))
+            parsed = self.parseThread(tdata)
+            print('{} - {} - {} - {}'.format(parsed['messages'][0]['time'], thread['id'], thread['historyId'], tdata['messages'][0]['snippet']))
 
 
 if __name__ == '__main__':
