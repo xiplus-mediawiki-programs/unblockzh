@@ -5,12 +5,14 @@ import json
 import os.path
 import re
 from pathlib import Path
+
+import googleapiclient.errors
 from bs4 import BeautifulSoup
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-import googleapiclient.errors
 
 BASE_DIR = Path(__file__).resolve().parent
 CACHE_DIR = BASE_DIR / 'cache'
@@ -36,9 +38,14 @@ class UnblockZh:
         if os.path.exists(token_path):
             creds = Credentials.from_authorized_user_file(token_path, SCOPES)
         if not creds or not creds.valid:
+            refresh_ok = False
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
+                try:
+                    creds.refresh(Request())
+                    refresh_ok = True
+                except RefreshError:
+                    pass
+            if not refresh_ok:
                 flow = InstalledAppFlow.from_client_secrets_file(BASE_DIR / 'credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
             with open(token_path, 'w') as token:
