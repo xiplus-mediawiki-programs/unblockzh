@@ -30,7 +30,7 @@ class UnblockZh:
     unblockZhLabelName = None
     threads = []
 
-    def __init__(self):
+    def __init__(self, redirect_port):
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
         creds = None
@@ -47,7 +47,7 @@ class UnblockZh:
                     pass
             if not refresh_ok:
                 flow = InstalledAppFlow.from_client_secrets_file(BASE_DIR / 'credentials.json', SCOPES)
-                creds = flow.run_console()
+                creds = flow.run_local_server(port=redirect_port)
             with open(token_path, 'w') as token:
                 token.write(creds.to_json())
 
