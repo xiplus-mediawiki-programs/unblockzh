@@ -137,6 +137,10 @@ class UnblockZh:
                     if m:
                         msgdata['fromName'] = m.group(1)
                         msgdata['fromAddress'] = m.group(2)
+                elif header['name'] == 'Reply-To':
+                    m = re.findall(r'<(.+?)>', header['value'])
+                    if m:
+                        msgdata['replyTo'] = m
             msgdata['text'] = '\n'.join(self.parseMessageParts(msg['payload']))
 
             path = TMP_DIR / '{}-{}.txt'.format(tdata['id'], msg['id'])
