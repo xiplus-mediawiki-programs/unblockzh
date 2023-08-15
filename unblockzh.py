@@ -137,6 +137,9 @@ class UnblockZh:
                     if m:
                         msgdata['fromName'] = m.group(1)
                         msgdata['fromAddress'] = m.group(2)
+                        continue
+                    if re.search(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$', header['value']):
+                        msgdata['fromAddress'] = header['value']
                 elif header['name'] == 'Reply-To':
                     m = re.findall(r'<(.+?)>', header['value'])
                     if m:
