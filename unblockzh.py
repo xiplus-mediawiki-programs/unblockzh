@@ -26,11 +26,11 @@ class UnblockZh:
     maxResults = 500
     cacheThreads = False
     cacheThread = False
-    query = 'list:unblock-zh@lists.wikimedia.org'
     unblockZhLabelName = None
     threads = []
 
-    def __init__(self, redirect_port):
+    def __init__(self, query, redirect_port=1234):
+        self.query = query
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
         creds = None
